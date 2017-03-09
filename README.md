@@ -18,3 +18,7 @@ This is a toy project done for educational purpose of learning software renderin
 - Animations (asteroid explosion, spaceship explosion)
 - Particles (spaceship exhaust)
 - Enemies and enemy AI
+
+
+### Screenshot
+![Alt Text](https://github.com/dvorontsov/asteroids-clone/blob/master/Screenshots/Screenshot-1.png)
