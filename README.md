@@ -1,5 +1,5 @@
 # asteroids-clone
-This is a toy project done for educational purpose of learning software rendering and basics of game architecture.
+This is a toy project done for educational purpose of learning software rendering and basics of game architecture.  One of the goals is to use as little dependencies as possible in favor of learning to build things from scratch.
 
 ### Includes
 - Pixel plotting
