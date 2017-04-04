@@ -62,7 +62,7 @@ float GenerateAsteroidInitialVelocity()
 {
 	int whole = (rand() % 5) + 1;
 	int fraction = rand() % 100;
-	float result = whole + (fraction / 100);
+	float result = (float)whole + (fraction / 100);
 	return result * 1.5f;
 }
 
@@ -153,7 +153,7 @@ void GenerateAsteroid(asteroid *asteroid, model_t *models, bool initMemory)
 	asteroid->model->vertices = models[asteroidModel].vertices;
 	asteroid->model->vertCount = models[asteroidModel].vertCount;
 	memcpy(asteroid->model->verticesTransformed, asteroid->model->vertices, vertMemSize);
-	asteroid->model->rotationDeltaDegrees = GernerateAsteroidRotationDeltaDegrees();
+	asteroid->model->rotationDeltaDegrees = (float)GernerateAsteroidRotationDeltaDegrees();
 	asteroid->model->rotationDegrees = 0;
 
 	position_and_direction posAndDir = GenerateAsteroidInitialPositionAndMovementDirection();
@@ -177,8 +177,8 @@ bool isAtLeastOneVerticeOnScreen(v2 *vertices, int vertCount, v2 position)
 {
 	for (int i = 0; i < vertCount; i++)
 	{
-		if (WithinScreenBoundaries(vertices[i].x + position.x,
-			vertices[i].y + position.y, SCREEN_WIDTH, SCREEN_HEIGHT))
+		if (WithinScreenBoundaries((int)(vertices[i].x + position.x),
+			(int)(vertices[i].y + position.y), SCREEN_WIDTH, SCREEN_HEIGHT))
 		{
 			return true;
 		}
@@ -190,8 +190,8 @@ bool isAllVerticesOffScreen(v2 *vertices, int vertCount, v2 position)
 {
 	for (int i = 0; i < vertCount; i++)
 	{
-		if (WithinScreenBoundaries(vertices[i].x + position.x,
-			vertices[i].y + position.y, SCREEN_WIDTH, SCREEN_HEIGHT))
+		if (WithinScreenBoundaries((int)(vertices[i].x + position.x),
+			(int)(vertices[i].y + position.y), SCREEN_WIDTH, SCREEN_HEIGHT))
 		{
 			return false;
 		}
@@ -570,7 +570,7 @@ void UpdatePlayer(game_state *state)
 	if (controller->right)
 	{
 		playerModel->rotationDeltaDegrees -= (7 * 2);
-		playerModel->rotationDegrees = std::fmod((float)playerModel->rotationDeltaDegrees, 360.0f);
+		playerModel->rotationDegrees = std::fmod(playerModel->rotationDeltaDegrees, 360.0f);
 	}
 
 	if (controller->left)
