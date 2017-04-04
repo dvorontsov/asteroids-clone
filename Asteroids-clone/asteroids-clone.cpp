@@ -31,22 +31,22 @@ position_and_direction GenerateAsteroidInitialPositionAndMovementDirection()
 	{
 	case NORTH:
 		result.posision = v2(randomX, randomY + SCREEN_HEIGHT);
-		Rotate(v2(0, 0), &direction, 270.0 + directionDegreesDelta);
+		Rotate(v2(0, 0), &direction, 270.0f + directionDegreesDelta);
 		result.direction = direction;
 		break;
 	case EAST:
 		result.posision = v2(randomX + SCREEN_WIDTH, randomY);
-		Rotate(v2(0, 0), &direction, 180.0 + directionDegreesDelta);
+		Rotate(v2(0, 0), &direction, 180.0f + directionDegreesDelta);
 		result.direction = direction;
 		break;
 	case SOUTH:
 		result.posision = v2(randomX, 0 - randomY);
-		Rotate(v2(0, 0), &direction, 90.0 + directionDegreesDelta);
+		Rotate(v2(0, 0), &direction, 90.0f + directionDegreesDelta);
 		result.direction = direction;
 		break;
 	case WEST:
 		result.posision = v2(0 - randomX, randomY);
-		Rotate(v2(0, 0), &direction, 0.0 + directionDegreesDelta);
+		Rotate(v2(0, 0), &direction, 0.0f + directionDegreesDelta);
 		result.direction = direction;
 		break;
 	default:
@@ -63,7 +63,7 @@ float GenerateAsteroidInitialVelocity()
 	int whole = (rand() % 5) + 1;
 	int fraction = rand() % 100;
 	float result = whole + (fraction / 100);
-	return result * 1.5;
+	return result * 1.5f;
 }
 
 void InitAsteroidState(asteroid *asteroid)
@@ -80,8 +80,8 @@ void InitAsteroidState(asteroid *asteroid)
 
 	for (int j = 0; j < numOfVerts; j++)
 	{
-		if (WithinScreenBoundaries(asteroid->model->vertices[j].x + asteroid->position.x,
-			asteroid->model->vertices[j].y + asteroid->position.y, SCREEN_WIDTH, SCREEN_HEIGHT))
+		if (WithinScreenBoundaries((int)(asteroid->model->vertices[j].x + asteroid->position.x),
+			(int)(asteroid->model->vertices[j].y + asteroid->position.y), SCREEN_WIDTH, SCREEN_HEIGHT))
 		{
 			allVertsAreOffScreen = false;
 		}
@@ -484,7 +484,7 @@ void UpdateProjectiles(projectile_t **projectiles)
 	{
 		while (current != nullptr)
 		{
-			if (WithinScreenBoundaries(current->position.x, current->position.y, 
+			if (WithinScreenBoundaries((int)current->position.x, (int)current->position.y, 
 				SCREEN_WIDTH, SCREEN_HEIGHT) && current->active)
 			{
 				// update position
@@ -570,13 +570,13 @@ void UpdatePlayer(game_state *state)
 	if (controller->right)
 	{
 		playerModel->rotationDeltaDegrees -= (7 * 2);
-		playerModel->rotationDegrees = std::fmod(playerModel->rotationDeltaDegrees, 360.0);
+		playerModel->rotationDegrees = std::fmod((float)playerModel->rotationDeltaDegrees, 360.0f);
 	}
 
 	if (controller->left)
 	{
 		playerModel->rotationDeltaDegrees += (7 * 2);
-		playerModel->rotationDegrees = std::fmod(playerModel->rotationDeltaDegrees, 360.0);
+		playerModel->rotationDegrees = std::fmod(playerModel->rotationDeltaDegrees, 360.0f);
 	}
 
 	Rotate(v2(0, 0), &player->facingDirection, playerModel->rotationDegrees);
@@ -595,7 +595,8 @@ void UpdatePlayer(game_state *state)
 		}
 	}
 
-	if (controller->shoot) {
+	if (controller->shoot) 
+	{
 		if (!player->fireCooldown)
 		{
 			projectile_t *torpedo = (projectile_t *)malloc(sizeof(projectile_t));
@@ -628,19 +629,21 @@ void UpdatePlayer(game_state *state)
 		player->direction = player->facingDirection;
 	}
 
-	float t = (float)1 / 30 * 1000.0; // seconds
+	float t = (float)1 / 30 * 1000.0f; // seconds
 	float a = 0.0f; // acceleration
 
-	if (controller->forward) {
+	if (controller->forward) 
+	{
 		a = 0.005f / 2.0f;
 	}
 
-	if (controller->back) {
+	if (controller->back) 
+	{
 		a = -0.0005f;
 	}
 
 	// drag
-	a += -0.0025 * player->velocity;
+	a += -0.0025f * player->velocity;
 
 	player->velocity = player->velocity + a * t;
 	if (player->velocity < 0)
